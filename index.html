@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+    <title>SPIDER</title>
+  </head>
+  <body>
+    <script>
+      let pts = [];
+
+      function setup() {
+        createCanvas(windowWidth, windowHeight);
+        colorMode(HSB);
+        for (let i = 0; i < 200; i++) {
+          pts.push(createVector(random(width), random(height)));
+        }
+      }
+
+      function draw() {
+        background(2, 50);
+
+        for (let i of pts) {
+          let d = dist(i.x, i.y, mouseX, mouseY);
+          let pointSize = map(d, 0, 150, 20, 4);
+
+          fill(20, 10);
+          noStroke();
+
+          if (d < 150) {
+            fill(200, 10);
+            stroke(100, map(d, 0, 150, 150, 50));
+            strokeWeight(map(d, 0, 150, 2, 0.5));
+
+            let segments = 10;
+            let xStep = (mouseX - i.x) / segments;
+            let yStep = (mouseY - i.y) / segments;
+            let currentX = i.x;
+            let currentY = i.y;
+            for (let j = 0; j < segments; j++) {
+              let nextX = currentX + xStep + random(-3, 3);
+              let nextY = currentY + yStep + random(-3, 3);
+              line(currentX, currentY, nextX, nextY);
+              currentX = nextX;
+              currentY = nextY;
+            }
+          }
+          circle(i.x, i.y, pointSize);
+
+          i.x += random(-0.5, 0.5);
+          i.y += random(-0.5, 0.5);
+
+          if (i.x > width) i.x = 0;
+          if (i.x < 0) i.x = width;
+          if (i.y > height) i.y = 0;
+          if (i.y < 0) i.y = height;
+        }
+      }
+    </script>
+  </body>
+</html>
